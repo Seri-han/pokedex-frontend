@@ -1,0 +1,14 @@
+main {
+    padding: 2rem;
+}
+
+.main__title {
+    text-align: center;
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+}
+
+.main__loading {
+    text-align: center;
+    font-size: 1.15rem;
+}
