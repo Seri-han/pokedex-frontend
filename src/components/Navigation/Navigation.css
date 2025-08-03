@@ -1,0 +1,37 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.navigation__link {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  transition: ease all;
+  font-size: 1.2rem;
+}
+
+.navigation__link:hover {
+  color: rgb(62, 3, 179);
+}
+
+
+.navigation__left {
+  display: flex;
+  gap: 1rem;
+}
+
+.navigation__right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.navigation__auth-button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #e3350d;
+  cursor: pointer;
+}

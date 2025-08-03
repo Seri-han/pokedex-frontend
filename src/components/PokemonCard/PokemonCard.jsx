@@ -1,6 +1,7 @@
 import './PokemonCard.css';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
-function PokemonCard({ name, image, types, onClick }) {
+function PokemonCard({ name, image, types, onClick, isFavorite, onLike }) {
   return (
     <div className='pokemon-card' onClick={onClick}>
       <img className='pokemon-card__image' src={image} alt={name} />
@@ -12,9 +13,19 @@ function PokemonCard({ name, image, types, onClick }) {
           </span>
         ))}
       </div>
+<button
+  className='pokemon-card__like-button'
+  onClick={(e) => {
+    e.stopPropagation();
+    onLike(name);
+  }}
+>
+  {isFavorite ? <FaHeart color="red" /> : <FaRegHeart />}
+</button>
+
+      
     </div>
   );
 }
-
 
 export default PokemonCard;

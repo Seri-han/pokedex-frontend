@@ -1,9 +1,13 @@
 .footer {
-  background-color: #ef5350;
+  background-color: transparent;
   text-align: center;
   padding: 1rem;
-  color: white;
+  color: black;
   margin-top: 2rem;
+  /* position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0; */
 }
 
 .footer__text {
