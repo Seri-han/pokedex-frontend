@@ -91,3 +91,10 @@
   cursor: pointer;
   padding: 0;
 }
+
+.error-message {
+  color: #e3350d;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}

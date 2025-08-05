@@ -1,42 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import "./Main.css";
 import PokemonList from "../PokemonList/PokemonList";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { getAllPokemons } from "../../utils/pokeapi";
 
-function Main({ isLoggedIn, onRequestLogin }) {
-  const [pokemons, setPokemons] = useState([]);
+export default function Main({ isLoggedIn, onRequestLogin, favorites, setFavorites, pokemons, setPokemons }) {
   const [loading, setLoading] = useState(true);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem("favorites");
-    return saved ? JSON.parse(saved) : [];
-  });
   const [visibleCount, setVisibleCount] = useState(20);
-const [searchQuery, setSearchQuery] = useState("");
-
-  function handleShowMore() {
-    setVisibleCount((prev) => prev + 20);
-  }
-
-  function handleLike(pokemonName) {
-    if (!isLoggedIn) {
-      onRequestLogin();
-      return;
-    }
-
-    if (favorites.includes(pokemonName)) {
-      setFavorites(favorites.filter((name) => name !== pokemonName));
-    } else {
-      setFavorites([...favorites, pokemonName]);
-    }
-  }
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getAllPokemons();
+        const data = await getAllPokemons(1025, 0);
         setPokemons(data);
       } catch (err) {
         console.error("Error fetching pokemons", err);
@@ -45,7 +24,11 @@ const [searchQuery, setSearchQuery] = useState("");
       }
     }
 
-    fetchData();
+    if (pokemons.length === 0) {
+      fetchData();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   function handleCardClick(pokemon) {
@@ -58,40 +41,57 @@ const [searchQuery, setSearchQuery] = useState("");
     setIsModalOpen(false);
   }
 
+  function handleLike(name) {
+    if (!isLoggedIn) {
+      onRequestLogin();
+      return;
+    }
+    const updated = favorites.includes(name)
+      ? favorites.filter(n => n !== name)
+      : [...favorites, name];
+
+    setFavorites(updated);
+    localStorage.setItem("favorites", JSON.stringify(updated));
+  }
+
   const filteredPokemons = pokemons.filter((pokemon) =>
-pokemon.name.toLowerCase().includes(searchQuery.toLowerCase())
-);
+    pokemon.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-const visiblePokemons = filteredPokemons.slice(0, visibleCount);
-
+  const visiblePokemons = filteredPokemons.slice(0, visibleCount);
 
   return (
     <main className="main">
       <h1 className="main__title">Pokédex</h1>
+
       <input
-className="main__search"
-type="text"
-placeholder="Buscar Pokémon por nombre..."
-value={searchQuery}
-onChange={(e) => setSearchQuery(e.target.value)}
-/>
+        className="main__search"
+        type="text"
+        placeholder="Buscar Pokémon por nombre..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+
       {loading ? (
         <p className="main__loading">Cargando Pokémon...</p>
       ) : (
-<PokemonList
-  // pokemons={pokemons.slice(0, visibleCount)}
-  pokemons={visiblePokemons}
-  onCardClick={handleCardClick}
-  onLike={handleLike}
-  favorites={favorites}
-  isLoggedIn={isLoggedIn}
-/>
+        <>
+          <PokemonList
+            pokemons={visiblePokemons}
+            onCardClick={handleCardClick}
+            onLike={handleLike}
+            favorites={favorites}
+            isLoggedIn={isLoggedIn}
+          />
+
+          {visibleCount < filteredPokemons.length && (
+            <button className="main__show-more-button" onClick={() => setVisibleCount(prev => prev + 20)}>
+              Mostrar más
+            </button>
+          )}
+        </>
       )}
-      {visibleCount < pokemons.length && (
-  <button className="main__show-more-button" onClick={handleShowMore}>
-    Mostrar más
-  </button>
-)}
+
       <ModalWithForm
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -100,5 +100,3 @@ onChange={(e) => setSearchQuery(e.target.value)}
     </main>
   );
 }
-
-export default Main;

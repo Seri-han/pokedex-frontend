@@ -17,19 +17,25 @@ export default function Navigation({
           Acerca
         </NavLink>
       </div>
+
       <div className="navigation__right">
         {isLoggedIn ? (
-          <button className="navigation__auth-button" onClick={onLogout}>
-            Cerrar sesión
-          </button>
+          <>
+            <NavLink to="/profile" className="navigation__link">
+              Perfil
+            </NavLink>
+            <button onClick={onLogout} className="navigation__auth-button">
+              Cerrar sesión
+            </button>
+          </>
         ) : (
           <>
-            <button className="navigation__auth-button" onClick={onLoginClick}>
+            <button onClick={onLoginClick} className="navigation__auth-button">
               Login
             </button>
             <button
-              className="navigation__auth-button"
               onClick={onRegisterClick}
+              className="navigation__auth-button"
             >
               Registrarse
             </button>
