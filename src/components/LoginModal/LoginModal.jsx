@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./loginModal.css";
 
 export default function LoginModal({ isOpen, onClose, onLogin, onOpenRegister }) {
@@ -6,6 +6,20 @@ export default function LoginModal({ isOpen, onClose, onLogin, onOpenRegister })
     email: "",
     password: ""
   });
+
+  // Cerrar con Escape:
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleEsc(e) {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    }
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [isOpen]);
+
 
   const [errors, setErrors] = useState({});
 

@@ -1,8 +1,9 @@
-const BASE_URL = 'https://pokeapi.co/api/v2/pokemon';
+import { POKE_API_BASE_URL } from "../config";
+
 
 export async function getAllPokemons(limit = 1025, offset = 0) {
     try {
-        const res = await fetch(`${BASE_URL}?limit=${limit}&offset=${offset}`);
+        const res = await fetch(`${POKE_API_BASE_URL}?limit=${limit}&offset=${offset}`);
         if (!res.ok) {
             throw new Error('Error al obtener la lista de Pokemon')
         }

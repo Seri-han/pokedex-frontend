@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RegisterModal.css';
 
 export default function RegisterModal({ isOpen, onClose, onRegister, onOpenLogin }) {
@@ -9,6 +9,19 @@ export default function RegisterModal({ isOpen, onClose, onRegister, onOpenLogin
     password: '',
     confirmPassword: ''
   });
+
+   useEffect(() => {
+    if (!isOpen) return;
+
+    function handleEsc(e) {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    }
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [isOpen]);
+
 
   const [errors, setErrors] = useState({});
 

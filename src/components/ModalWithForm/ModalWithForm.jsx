@@ -1,7 +1,22 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import './ModalWithForm.css';
+import { useEffect } from 'react';
 
 function ModalWithForm({ isOpen, onClose, pokemon }) {
   if (!isOpen || !pokemon) return null;
+
+ useEffect(() => {
+    if (!isOpen) return;
+
+    function handleEsc(e) {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    }
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [isOpen, onClose]);
+
 
   const { name, sprites, height, weight, abilities, types } = pokemon;
 
